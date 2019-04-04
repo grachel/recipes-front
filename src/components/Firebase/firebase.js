@@ -61,7 +61,7 @@ class Firebase {
         referrer: "no-referrer",
       })
 
-      const json = await resp.json();
+      const json = await resp.json();      
       return json
     } catch (err) {
       console.log(err)
