@@ -3,6 +3,7 @@ import 'firebase/auth';
 import 'firebase/database';
 
 const config = {
+  url: "http://localhost:8080/",
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
   databaseURL: process.env.REACT_APP_DATABASE_URL,
@@ -44,6 +45,29 @@ class Firebase {
   users = () => this.db.ref('users');
 
   // *** End User API ***
+
+  async get(url, id) {
+    try {
+      const token = await this.auth.currentUser.getIdToken();
+      const resp = await fetch(config.url + url + "/" + id, {
+        method: "GET",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "include",
+        headers: {
+          "x-firebase-auth": token
+        },
+        redirect: "follow",
+        referrer: "no-referrer",
+      })
+
+      const json = await resp.json();
+      return json
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
 }
 
 export default Firebase;
