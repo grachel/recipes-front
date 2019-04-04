@@ -11,7 +11,7 @@ export class Home extends React.Component {
   };
 
   componentDidMount() {  
-    this.props.firebase.get("recipes", "").then( data => 
+    this.props.firebase.get("recipes/user", this.props.authUser.uid).then( data => 
       this.setState({
         recipes: data
       })
