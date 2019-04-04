@@ -10,7 +10,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import ErrorIcon from '@material-ui/icons/Error';
 
-import { withFirebase } from '../Firebase';
+import { withService } from '../Service';
 import * as ROUTES from '../../constants/routes';
 
 const INITIAL_STATE = {
@@ -72,7 +72,7 @@ class PasswordForgetFormBase extends Component {
   onSubmit = event => {
     const { email } = this.state;
 
-    this.props.firebase
+    this.props.service
       .doPasswordReset(email)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
@@ -140,7 +140,7 @@ const PasswordForgetLink = () => (
 );
 
 const PasswordForgetPage = compose(
-  withFirebase,
+  withService,
   withStyles(styles),
 )(PasswordForgetFormBase);
 

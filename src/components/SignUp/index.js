@@ -10,7 +10,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import ErrorIcon from '@material-ui/icons/Error';
 
-import { withFirebase } from '../Firebase';
+import { withService } from '../Service';
 import * as ROUTES from '../../constants/routes';
 
 const INITIAL_STATE = {
@@ -77,11 +77,10 @@ class SignUpFormBase extends Component {
   onSubmit = event => {
     const { username, email, passwordOne } = this.state;
 
-    this.props.firebase
+    this.props.service
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-        // Create a user in your Firebase realtime database
-        this.props.firebase
+        this.props.service
           .createUser(authUser.user.uid, username, email)         
           .then(() => {
             this.setState({ ...INITIAL_STATE });
@@ -196,7 +195,7 @@ const SignUpLink = () => (
 
 const SignUpPage = compose(
   withRouter,
-  withFirebase,
+  withService,
   withStyles(styles),
 )(SignUpFormBase);
 

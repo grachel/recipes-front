@@ -1,7 +1,7 @@
 import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { withFirebase } from '../Firebase';
+import { withService } from '../Service';
 
 class SignOutButton extends MenuItem { 
   render() {
@@ -10,11 +10,11 @@ class SignOutButton extends MenuItem {
     return(
       <MenuItem onClick={ () => {
         event();
-        this.props.firebase.doSignOut();
+        this.props.service.doSignOut();
       }
       }>Wyloguj</MenuItem>
     )
   }
 }
 
-export default withFirebase(SignOutButton);
+export default withService(SignOutButton);

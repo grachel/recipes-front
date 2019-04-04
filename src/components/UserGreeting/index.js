@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 import { withAuthorization } from '../Session';
-import { withFirebase } from '../Firebase';
+import { withService } from '../Service';
 
 const styles = theme => ({
   grow: {
@@ -20,12 +20,12 @@ class UserGreetingBase extends React.Component {
   }
 
   componentDidMount() {
-    const { firebase, authUser } = this.props;
+    const { service, authUser } = this.props;
 
     this.setState({
       username: ''
     }, () => {
-      firebase.user(authUser.uid)
+      service.user(authUser.uid)
         .then(user => {
           this.setState({username: user.username})
         })
@@ -48,7 +48,7 @@ class UserGreetingBase extends React.Component {
 const condition = authUser => !!authUser;
 
 const UserGreeting = compose(
-  withFirebase,
+  withService,
   withAuthorization(condition),
   withStyles(styles),
 )(UserGreetingBase);

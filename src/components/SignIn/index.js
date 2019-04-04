@@ -12,7 +12,7 @@ import ErrorIcon from '@material-ui/icons/Error';
 
 import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
-import { withFirebase } from '../Firebase';
+import { withService } from '../Service';
 import * as ROUTES from '../../constants/routes';
 
 
@@ -80,7 +80,7 @@ class SignInFormBase extends Component {
   onSubmit = event => {
     const { email, password } = this.state;
 
-    this.props.firebase
+    this.props.service
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
@@ -158,7 +158,7 @@ SignInFormBase.propTypes = {
 
 const SignInPage = compose(
   withRouter,
-  withFirebase,
+  withService,
   withStyles(styles),
 )(SignInFormBase);
 

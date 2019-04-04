@@ -3,7 +3,7 @@ import { compose } from 'recompose';
 
 import { withAuthorization } from '../Session';
 import { RecipesList } from '../Recipe';
-import { withFirebase } from '../Firebase';
+import { withService } from '../Service';
 
 export class Home extends React.Component {
   state = {
@@ -11,7 +11,7 @@ export class Home extends React.Component {
   };
 
   componentDidMount() {  
-    this.props.firebase.get("recipes/user", this.props.authUser.uid).then( data => 
+    this.props.service.get("recipes/user", this.props.authUser.uid).then( data => 
       this.setState({
         recipes: data
       })
@@ -32,7 +32,7 @@ export class Home extends React.Component {
 const condition = authUser => !!authUser;
 
 const HomePage = compose(
-  withFirebase,
+  withService,
   withAuthorization(condition),
 )(Home);
 
