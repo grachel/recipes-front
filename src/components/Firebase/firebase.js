@@ -17,7 +17,6 @@ class Firebase {
     app.initializeApp(config);
 
     this.auth = app.auth();
-    this.db = app.database();
   }
 
   // *** Begin Auth API ***
@@ -40,10 +39,10 @@ class Firebase {
 
   // *** Begin User API ***
 
-  user = uid => this.db.ref(`users/${uid}`);
+  user = uid => this.get("users", uid); 
 
-  users = () => this.db.ref('users');
-
+  createUser = (uid, username, email) => this.post("users", {uid, username, email})
+  
   // *** End User API ***
 
   async get(url, id) {
@@ -59,6 +58,30 @@ class Firebase {
         },
         redirect: "follow",
         referrer: "no-referrer",
+      })
+
+      const json = await resp.json();      
+      return json
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  async post(url, data) {
+    try {
+      const token = await this.auth.currentUser.getIdToken();
+      const resp = await fetch(config.url + url, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "include",
+        headers: {
+          "x-firebase-auth": token,
+          'Content-Type': 'application/json'
+        },
+        redirect: "follow",
+        referrer: "no-referrer",
+        body: JSON.stringify(data)
       })
 
       const json = await resp.json();      

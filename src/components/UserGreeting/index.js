@@ -25,10 +25,9 @@ class UserGreetingBase extends React.Component {
     this.setState({
       username: ''
     }, () => {
-      firebase.user(authUser.uid).once('value')
-        .then(snapshot => {
-          var user = (snapshot.val() && snapshot.val().username)
-          this.setState({username: user})
+      firebase.user(authUser.uid)
+        .then(user => {
+          this.setState({username: user.username})
         })
     })
   }
