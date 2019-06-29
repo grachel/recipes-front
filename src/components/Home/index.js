@@ -2,7 +2,7 @@ import React from "react";
 import { compose } from "recompose";
 
 import { withAuthorization } from "../Session";
-import { RecipesList } from "../Recipe";
+import RecipesList from "../Recipe";
 import { withService } from "../Service";
 
 function snapshotToArray(snapshot) {

@@ -1,20 +1,54 @@
-import React from 'react';
+import React from "react";
+import { compose } from "recompose";
+import { withStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import Truncate from 'react-truncate';
 
-export class RecipesList extends React.Component {
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  paper: {
+    margin: "1%",
+    height: 250,
+    width: 250,
+    padding: 10,
+    overflow: "hidden",
+    cursor: "pointer"
+  },
+  title:{
+    display: 'block',
+    fontWeight: 'bold',
+  }
+});
 
-   render() {
+export class RecipesListBase extends React.Component {
+
+
+  onClick = () => {
+  };
+
+  render() {
+    const { classes } = this.props;
+
     return (
-      <ul>
-        {this.props.recipes && this.props.recipes.map((item, index) => (
-          <li key={index}>
-            <div className="content">
-              <h4 className="header">{item.title}</h4>
-              <div>{item.desc}</div>             
-            </div>
-          </li>
-        ))}
-
-      </ul>
+      <Grid container justify="center" className={classes.root} spacing={8}>
+        {this.props.recipes &&
+          this.props.recipes.map((item, index) => (
+            <Paper key={index} className={classes.paper} onClick={this.onClick}>
+              <span className={classes.title}>{item.title}</span>
+              <br />
+              <Truncate lines={7} ellipsis={<span>...</span>}>
+                {item.desc}
+            </Truncate>              
+            </Paper>
+          ))}
+      </Grid>
     );
   }
 }
+
+const RecipesList = compose(withStyles(styles))(RecipesListBase);
+
+export default RecipesList;
