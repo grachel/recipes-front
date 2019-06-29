@@ -28,9 +28,19 @@ const styles = theme => ({
 
 export class RecipesListBase extends React.Component {
 
+  findPaper = t => {
+    if(t.tagName === "DIV"){
+      return t;
+    } else {
+      return this.findPaper(t.parentElement)
+    }
+  }
+
   onClick = e => {
-    if (e.target.id) {
-      this.props.history.push(ROUTES.RECIPE + "/" + e.target.id);
+
+    const paper = this.findPaper(e.target);
+    if (paper) {
+      this.props.history.push(ROUTES.RECIPE + "/" + paper.id);
     }
   };
 
