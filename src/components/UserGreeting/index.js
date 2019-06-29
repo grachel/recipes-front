@@ -22,14 +22,9 @@ class UserGreetingBase extends React.Component {
   componentDidMount() {
     const { service, authUser } = this.props;
 
-    this.setState({
-      username: ''
-    }, () => {
-      service.user(authUser.uid)
-        .then(user => {
-          this.setState({username: user.username})
-        })
-    })
+    service.user(authUser.uid).once("value", data => {
+      this.setState({username: data.val().username})
+    }); 
   }
 
   render() {

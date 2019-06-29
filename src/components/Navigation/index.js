@@ -131,14 +131,14 @@ class NavigationBase extends React.Component {
                   <HomeIcon className={classes.icon} />
                 </IconButton>
                 <Typography variant="h6" color="inherit" className={classes.grow}>
-                  Recipes
+                  Przepisy
                 </Typography>
                 <div className={classes.search}>
                   <div className={classes.searchIcon}>
                     <SearchIcon />
                   </div>
                   <InputBase
-                    placeholder="Search…"
+                    placeholder="Szukaj"
                     classes={{
                       root: classes.inputRoot,
                       input: classes.inputInput,

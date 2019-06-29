@@ -80,15 +80,16 @@ class SignUpFormBase extends Component {
     this.props.service
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-        this.props.service
-          .createUser(authUser.user.uid, username, email)         
-          .then(() => {
-            this.setState({ ...INITIAL_STATE });
-            this.props.history.push(ROUTES.HOME);
-          })
-          .catch(error => {
-            this.setState({ error });
+        return this.props.service
+          .user(authUser.user.uid)
+          .set({
+            username,
+            email,
           });
+      })
+      .then(() => {
+        this.setState({ ...INITIAL_STATE });
+        this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {
         this.setState({ error });

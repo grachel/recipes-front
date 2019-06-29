@@ -11,11 +11,11 @@ export class Home extends React.Component {
   };
 
   componentDidMount() {  
-    this.props.service.get("recipes/user", this.props.authUser.uid).then( data => 
-      this.setState({
-        recipes: data
-      })
-    )    
+    // this.props.service.get("recipes/user", this.props.authUser.uid).then( data => 
+    //   this.setState({
+    //     recipes: data
+    //   })
+    // )    
   }
 
   render() {
