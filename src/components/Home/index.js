@@ -5,6 +5,19 @@ import { withAuthorization } from "../Session";
 import { RecipesList } from "../Recipe";
 import { withService } from "../Service";
 
+function snapshotToArray(snapshot) {
+  var returnArr = [];
+
+  snapshot.forEach(function(childSnapshot) {
+      var item = childSnapshot.val();
+      item.key = childSnapshot.key;
+
+      returnArr.push(item);
+  });
+
+  return returnArr;
+};
+
 export class Home extends React.Component {
   state = {
     recipes: []
@@ -12,7 +25,7 @@ export class Home extends React.Component {
 
   componentDidMount() {
     this.props.service.recipes().once("value", data => {
-      this.setState({ recipes: data.val() });
+      this.setState({ recipes: snapshotToArray(data) });
     });
   }
 
