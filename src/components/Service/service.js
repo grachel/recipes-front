@@ -1,6 +1,6 @@
-import app from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
+import app from "firebase/app";
+import "firebase/auth";
+import "firebase/database";
 
 const config = {
   url: "http://localhost:8080/",
@@ -33,8 +33,7 @@ class Service {
 
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
-  doPasswordUpdate = password =>
-    this.auth.currentUser.updatePassword(password);
+  doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
 
   // *** End Auth API ***
 
@@ -42,10 +41,17 @@ class Service {
 
   user = uid => this.db.ref(`users/${uid}`);
 
-  users = () => this.db.ref('users');
-  
+  users = () => this.db.ref("users");
+
   // *** End User API ***
 
+  // *** Begin User API ***
+
+  recipe = uid => this.db.ref(`recipes/${uid}`);
+
+  recipes = () => this.db.ref("recipes");
+
+  // *** End User API ***
 }
 
 export default Service;

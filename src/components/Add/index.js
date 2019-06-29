@@ -2,25 +2,22 @@ import React from "react";
 import { compose } from "recompose";
 
 import { withAuthorization } from "../Session";
-import { RecipesList } from "../Recipe";
 import { withService } from "../Service";
 
-export class Home extends React.Component {
+export class Add extends React.Component {
   state = {
-    recipes: []
+    
   };
 
   componentDidMount() {
-    this.props.service.recipes().once("value", data => {
-      this.setState({ recipes: data.val() });
-    });
+   
   }
 
   render() {
     return (
       <div>
         <main className="ui main text container">
-          <RecipesList recipes={this.state.recipes} />
+          add
         </main>
       </div>
     );
@@ -29,9 +26,9 @@ export class Home extends React.Component {
 
 const condition = authUser => !!authUser;
 
-const HomePage = compose(
+const AddPage = compose(
   withService,
   withAuthorization(condition)
-)(Home);
+)(Add);
 
-export default HomePage;
+export default AddPage;

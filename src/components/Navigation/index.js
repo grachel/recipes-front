@@ -13,6 +13,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -47,8 +48,8 @@ const styles = theme => ({
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing.unit * 2,
-    marginLeft: 0,
-    width: '80%',
+    marginLeft: 10,
+    width: '70%',
   },
   searchIcon: {
     width: theme.spacing.unit * 9,
@@ -107,6 +108,10 @@ class NavigationBase extends React.Component {
     this.props.history.push(ROUTES.HOME);
   };
 
+  onAddClick = () => {
+    this.props.history.push(ROUTES.ADD);
+  };
+
   onPwChangeClick = () => {
     this.handleClose();
     this.props.history.push(ROUTES.PASSWORD_CHANGE);
@@ -129,6 +134,9 @@ class NavigationBase extends React.Component {
               <Toolbar>
                 <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.onHomeClick}>
                   <HomeIcon className={classes.icon} />
+                </IconButton>
+                <IconButton className={classes.menuButton} color="inherit" aria-label="Dodaj" onClick={this.onAddClick}>
+                  <AddIcon className={classes.icon} />
                 </IconButton>
                 <Typography variant="h6" color="inherit" className={classes.grow}>
                   Przepisy
