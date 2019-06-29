@@ -1,9 +1,11 @@
 import React from "react";
 import { compose } from "recompose";
 import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Truncate from 'react-truncate';
+import Truncate from "react-truncate";
+
+import { withAuthorization } from "../Session";
+import { withService } from "../Service";
 
 const styles = theme => ({
   root: {
@@ -17,38 +19,47 @@ const styles = theme => ({
     overflow: "hidden",
     cursor: "pointer"
   },
-  title:{
-    display: 'block',
-    fontWeight: 'bold',
+  title: {
+    display: "block",
+    fontWeight: "bold"
   }
 });
 
-export class RecipesListBase extends React.Component {
+export class Recipe extends React.Component {
+    state = {
+        recipe: {}
+      };
 
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    this.props.service.recipe(id).once("value", data => {
+      this.setState({ recipe: data.val() });
+    });
+  }
 
-  onClick = () => {
-  };
+  onClick = () => {};
 
   render() {
     const { classes } = this.props;
-
+    const { recipe } = this.state;
     return (
-      <Grid container justify="center" className={classes.root} spacing={8}>
-        {this.props.recipes &&
-          this.props.recipes.map((item, index) => (
-            <Paper key={index} className={classes.paper} onClick={this.onClick}>
-              <span className={classes.title}>{item.title}</span>
-              <br />
-              <Truncate lines={7} ellipsis={<span>...</span>}>
-                {item.desc}
-            </Truncate>              
-            </Paper>
-          ))}
-      </Grid>
+        <Paper className={classes.paper} onClick={this.onClick}>
+        <span className={classes.title}>{recipe.title}</span>
+        <br />
+        <Truncate lines={7} ellipsis={<span>...</span>}>
+          {recipe.desc}
+        </Truncate>
+      </Paper>
     );
   }
 }
 
-const RecipesList = compose(withStyles(styles))(RecipesListBase);
+const condition = authUser => !!authUser;
 
-export default RecipesList;
+const RecipePage = compose(
+  withStyles(styles),
+  withService,
+  withAuthorization(condition)
+)(Recipe);
+
+export default RecipePage;

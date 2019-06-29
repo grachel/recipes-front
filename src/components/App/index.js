@@ -14,6 +14,7 @@ import AddPage from '../Add';
 import { withAuthentication } from '../Session';
 
 import * as ROUTES from '../../constants/routes';
+import RecipePage from '../Recipe';
 
 const App = () => (
   <Router>
@@ -25,6 +26,7 @@ const App = () => (
       <Route exact path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
       <Route exact path={ROUTES.HOME} component={HomePage} />
       <Route exact path={ROUTES.ADD} component={AddPage} />
+      <Route exact path={ROUTES.RECIPE + "/:id"} component={RecipePage} />
     </div>
   </Router>
 );

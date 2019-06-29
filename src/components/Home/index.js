@@ -2,21 +2,10 @@ import React from "react";
 import { compose } from "recompose";
 
 import { withAuthorization } from "../Session";
-import RecipesList from "../Recipe";
+import RecipesList from "../RecipesList";
 import { withService } from "../Service";
+import { snapshotToArray } from '../../constants/helper.js';
 
-function snapshotToArray(snapshot) {
-  var returnArr = [];
-
-  snapshot.forEach(function(childSnapshot) {
-      var item = childSnapshot.val();
-      item.key = childSnapshot.key;
-
-      returnArr.push(item);
-  });
-
-  return returnArr;
-};
 
 export class Home extends React.Component {
   state = {
