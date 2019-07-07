@@ -14,6 +14,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import AddIcon from "@material-ui/icons/Add";
+import PhotoIcon from "@material-ui/icons/Photo";
 
 import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
@@ -74,6 +75,10 @@ class NavigationBase extends React.Component {
     this.props.history.push(ROUTES.ADD);
   };
 
+  onPhotoClick = () => {
+    this.props.history.push(ROUTES.PHOTO);
+  };
+
   onPwChangeClick = () => {
     this.handleClose();
     this.props.history.push(ROUTES.PASSWORD_CHANGE);
@@ -109,6 +114,14 @@ class NavigationBase extends React.Component {
                   onClick={this.onAddClick}
                 >
                   <AddIcon className={classes.icon} />
+                </IconButton>
+                <IconButton
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label="Zapisane"
+                  onClick={this.onPhotoClick}
+                >
+                  <PhotoIcon className={classes.icon} />
                 </IconButton>
                 <Typography
                   variant="h6"

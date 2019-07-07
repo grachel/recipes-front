@@ -15,6 +15,7 @@ import { withAuthentication } from '../Session';
 
 import * as ROUTES from '../../constants/routes';
 import RecipePage from '../Recipe';
+import Photo from '../Photo';
 
 const App = () => (
   <Router>
@@ -26,6 +27,7 @@ const App = () => (
       <Route exact path={ROUTES.PASSWORD_CHANGE} component={PasswordChangePage} />
       <Route exact path={ROUTES.HOME} component={HomePage} />
       <Route exact path={ROUTES.ADD} component={AddPage} />
+      <Route exact path={ROUTES.PHOTO} component={Photo} />
       <Route exact path={ROUTES.RECIPE + "/:id"} component={RecipePage} />
     </div>
   </Router>

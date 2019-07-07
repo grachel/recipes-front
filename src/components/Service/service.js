@@ -1,6 +1,7 @@
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
+import "firebase/storage";
 
 const config = {
   url: "http://localhost:8080/",
@@ -18,10 +19,9 @@ class Service {
     app.initializeApp(config);
 
     this.auth = app.auth();
-    this.db = app.database();
+    this.db = app.database(); 
+    this.storage = app.storage(); 
   }
-
-  // *** Begin Auth API ***
 
   doCreateUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
@@ -35,23 +35,15 @@ class Service {
 
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
 
-  // *** End Auth API ***
-
-  // *** Begin User API ***
-
   user = uid => this.db.ref(`users/${uid}`);
 
-  users = () => this.db.ref("users");
-
-  // *** End User API ***
-
-  // *** Begin User API ***
+  users = () => this.db.ref("users");  
 
   recipe = uid => this.db.ref(`recipes/${uid}`);
 
   recipes = () => this.db.ref("recipes");
 
-  // *** End User API ***
+  images = () => this.db.ref("images");
 }
 
 export default Service;

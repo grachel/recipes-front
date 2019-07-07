@@ -1,13 +1,13 @@
 import React from "react";
 import { compose } from "recompose";
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from "../../constants/routes";
 
 import { withAuthorization } from "../Session";
 import { withService } from "../Service";
@@ -90,7 +90,19 @@ export class Add extends React.Component {
     desc: ""
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    if (this.props.location && this.props.location.state) {
+      const img = this.props.location.state.name;
+      if (img) {
+        this.props.service.storage
+          .ref(img)
+          .getDownloadURL()
+          .then(url => {
+            this.setState({ image: url });
+          });
+      }
+    }
+  }
 
   onAddClick = () => {
     const { title, desc } = this.state;
