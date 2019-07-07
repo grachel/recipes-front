@@ -18,26 +18,24 @@ const styles = theme => ({
     width: 250,
     padding: 10,
     overflow: "hidden",
-    cursor: 'pointer'
+    cursor: "pointer"
   },
   title: {
     display: "block",
     fontWeight: "bold"
-  }
+  },
 });
 
 export class RecipesListBase extends React.Component {
-
   findPaper = t => {
-    if(t.tagName === "DIV"){
+    if (t.tagName === "DIV") {
       return t;
     } else {
-      return this.findPaper(t.parentElement)
+      return this.findPaper(t.parentElement);
     }
-  }
+  };
 
   onClick = e => {
-
     const paper = this.findPaper(e.target);
     if (paper) {
       this.props.history.push(ROUTES.RECIPE + "/" + paper.id);
@@ -48,23 +46,25 @@ export class RecipesListBase extends React.Component {
     const { classes } = this.props;
 
     return (
-      <Grid container justify="center" className={classes.root} spacing={8}>
-        {this.props.recipes &&
-          this.props.recipes.map((item, index) => (
-            <Paper
-              id={item.key}
-              key={index}
-              className={classes.paper}
-              onClick={this.onClick}
-            >
-              <span className={classes.title}>{item.title}</span>
-              <br />
-              <Truncate lines={7} ellipsis={<span>...</span>}>
-                {item.desc}
-              </Truncate>
-            </Paper>
-          ))}
-      </Grid>
+      <div>        
+        <Grid container justify="center" className={classes.root} spacing={8}>
+          {this.props.recipes &&
+            this.props.recipes.map((item, index) => (
+              <Paper
+                id={item.key}
+                key={index}
+                className={classes.paper}
+                onClick={this.onClick}
+              >
+                <span className={classes.title}>{item.title}</span>
+                <br />
+                <Truncate lines={7} ellipsis={<span>...</span>}>
+                  {item.desc}
+                </Truncate>
+              </Paper>              
+            ))}
+        </Grid>
+      </div>
     );
   }
 }

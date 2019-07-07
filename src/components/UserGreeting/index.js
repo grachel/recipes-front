@@ -7,8 +7,8 @@ import { withAuthorization } from '../Session';
 import { withService } from '../Service';
 
 const styles = theme => ({
-  grow: {
-    flexGrow: 1,
+  right: {
+    right: 0
   },
 });
 
@@ -32,7 +32,7 @@ class UserGreetingBase extends React.Component {
     const { classes } = this.props;
 
     return (
-      <Typography variant="subtitle1" color="inherit" className={classes.grow}>
+      <Typography variant="subtitle1" color="inherit" className={classes.right}>
         Cześć, {username}
       </Typography>
     )
