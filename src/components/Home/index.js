@@ -8,7 +8,7 @@ import InputBase from "@material-ui/core/InputBase";
 import { withAuthorization } from "../Session";
 import RecipesList from "../RecipesList";
 import { withService } from "../Service";
-import { snapshotToArray } from "../../constants/helper.js";
+import { snapshotToArray, anyIncludes } from "../../constants/helper.js";
 
 const styles = theme => ({
   search: {
@@ -58,17 +58,22 @@ export class Home extends React.Component {
   }
 
   onSearchChange = e => {
-    const searchText = e.target.value;
-    const { recipes } = this.state;
+    const val = e.target.value;
     var filteredRecipes = [];
-    recipes.forEach(function(recipe) {
-      if (
-        recipe.desc.toLowerCase().replace("\n", " ").includes(searchText) ||
-        recipe.title.toLowerCase().replace("\n", " ").includes(searchText)
-      ) {
-        filteredRecipes.push(recipe);
-      }
-    });
+    const { recipes } = this.state;
+    if (val.length > 0) {
+      const searchText = val.split(",");
+      recipes.forEach(function(recipe) {
+        if (
+          anyIncludes(recipe.desc, searchText) ||
+          anyIncludes(recipe.title, searchText)
+        ) {
+          filteredRecipes.push(recipe);
+        }
+      });
+    } else {
+      filteredRecipes = recipes;
+    }
     this.setState({ filteredRecipes: filteredRecipes });
   };
 

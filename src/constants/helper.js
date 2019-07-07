@@ -10,3 +10,16 @@ export function snapshotToArray(snapshot) {
 
   return returnArr;
 }
+
+export function anyIncludes(source, searchArray) {  
+  let ret = false;
+  const txt = source.toLowerCase().replace("\n", " ");
+  searchArray.forEach(function(search) {
+    const srch = search.trim();
+    if(srch.length > 0 && txt.includes(srch)){
+      ret = true;
+    }
+  });
+
+  return ret;
+}
