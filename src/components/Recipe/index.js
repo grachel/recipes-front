@@ -2,7 +2,7 @@ import React from "react";
 import { compose } from "recompose";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import Truncate from "react-truncate";
+import TextareaAutosize from "react-autosize-textarea";
 
 import { withAuthorization } from "../Session";
 import { withService } from "../Service";
@@ -12,23 +12,28 @@ const styles = theme => ({
     flexGrow: 1
   },
   paper: {
-    margin: "1%",
-    height: 250,
-    width: 250,
-    padding: 10,
-    overflow: "hidden",
-    cursor: "pointer"
+    marginTop: "3%",
+    marginLeft: "8%",
+    width: "80%",
+    padding: "2%"
   },
   title: {
     display: "block",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontSize: "large"
+  },
+  textField: {
+    marginTop: "2%",
+    width: "100%",
+    border: "none",
+    resize: "none"
   }
 });
 
 export class Recipe extends React.Component {
-    state = {
-        recipe: {}
-      };
+  state = {
+    recipe: {}
+  };
 
   componentDidMount() {
     const { id } = this.props.match.params;
@@ -43,12 +48,9 @@ export class Recipe extends React.Component {
     const { classes } = this.props;
     const { recipe } = this.state;
     return (
-        <Paper className={classes.paper} onClick={this.onClick}>
+      <Paper className={classes.paper}>
         <span className={classes.title}>{recipe.title}</span>
-        <br />
-        <Truncate lines={7} ellipsis={<span>...</span>}>
-          {recipe.desc}
-        </Truncate>
+        <TextareaAutosize className={classes.textField} value={recipe.desc} />
       </Paper>
     );
   }
