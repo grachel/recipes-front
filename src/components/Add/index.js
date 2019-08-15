@@ -106,14 +106,33 @@ export class Add extends React.Component {
 
   onAddClick = () => {
     const { title, desc } = this.state;
-    const uid = this.props.service.recipes().push().key;
+    if(title && desc){
+      const uid = this.props.service.recipes().push().key;
 
-    this.props.service.recipe(uid).set({
-      title,
-      desc
-    });
-    this.props.history.push(ROUTES.HOME);
+      this.props.service.recipe(uid).set({
+        title,
+        desc
+      });
+
+      this.removePhotoFromList();
+
+      this.props.history.push(ROUTES.HOME);
+    }
   };
+
+  removePhotoFromList = () => {
+    if (this.props.location && this.props.location.state) {
+      const img = this.props.location.state.name;
+      const id = this.props.location.state.imageID;
+      if (img && id) {
+        this.props.service.image(id).remove();
+
+        this.props.service.storage
+          .ref(img)
+          .delete();
+      }
+    }
+  }
 
   onImageChange = e => {
     var reader = new FileReader();

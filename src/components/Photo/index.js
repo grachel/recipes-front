@@ -72,11 +72,13 @@ export class PhotoBase extends React.Component {
   };
 
   onClick = e => {
-    const name = this.findParent(e.target).getAttribute("value");
-    if (name) {
+    const parent = this.findParent(e.target);
+    const name = parent.getAttribute("value");
+    const uid = parent.getAttribute("data-uid");
+    if (name && uid) {
       this.props.history.push({
         pathname: ROUTES.ADD,
-        state: { name: name }
+        state: { name: name, imageID: uid}
       });
     }
   };
@@ -90,7 +92,7 @@ export class PhotoBase extends React.Component {
         <List className={classes.root}>
           {images &&
             images.map((item, index) => (
-              <ListItem button onClick={this.onClick} value={item.name}>
+              <ListItem key={index} button onClick={this.onClick} value={item.name} data-uid={item.key}>
                 <ListItemAvatar>
                   <Avatar>
                     <ImageIcon />
