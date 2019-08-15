@@ -56,7 +56,8 @@ export class PhotoBase extends React.Component {
     }
   };
  
-  onFileChange = e => {    
+  onFileChange = e => {  
+    const newImages = [ ...this.state.images ];  
     Array.from(this.fileSelector.files).forEach(file => {
       this.props.service.storage.ref(file.name).put(file);
       const uid = this.props.service.images().push().key;
@@ -64,7 +65,11 @@ export class PhotoBase extends React.Component {
         name: file.name,
         date: file.lastModified
       });   
+      newImages.push({ key:uid, name:file.name, date:file.lastModified})
+      console.log(newImages)
     });
+
+    this.setState({ images: newImages });
   };
 
   onAddClick = e => {
