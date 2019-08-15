@@ -44,6 +44,8 @@ class Service {
   recipes = () => this.db.ref("recipes");
 
   images = () => this.db.ref("images");
+
+  image = uid => this.db.ref(`images/${uid}`);
 }
 
 export default Service;
