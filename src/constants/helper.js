@@ -23,3 +23,14 @@ export function anyIncludes(source, searchArray) {
 
   return ret;
 }
+
+export function errorMessage(errorCode) {
+  switch (errorCode) {
+    case 'auth/requires-recent-login':
+      return "Sesja wygasła. Zaloguj się ponownie."  
+    case 'auth/weak-password':
+      return "Podane hasło jest zbyt słabe"
+    default:
+      return errorCode
+  }
+}
