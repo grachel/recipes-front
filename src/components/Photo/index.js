@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { compose } from "recompose";
 import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from "react-router-dom";
@@ -14,110 +14,90 @@ import AddIcon from "@material-ui/icons/Add";
 import * as ROUTES from "../../constants/routes";
 import { withService } from "../Service";
 import { snapshotToArray } from "../../constants/helper.js";
+import { styles } from "./styles";
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    width: "80%",
-    marginLeft:"10%"
-  },
-  fab: {
-    position: "absolute",
-    bottom: 50,
-    right: 50
-  }
-});
+export function PhotoBase(props) {
+  const [images, setImages] = useState([]);
+  const { classes } = props;
 
-export class PhotoBase extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { images: [], inputValue: null };
+  const fileSelector = document.createElement('input');
+  fileSelector.setAttribute('type', 'file');
+  fileSelector.setAttribute('multiple', 'multiple');
+  fileSelector.setAttribute('accept', 'image/png, image/jpeg');
+  fileSelector.onchange = onFileChange;
 
-    this.fileSelector = document.createElement('input');
-    this.fileSelector.setAttribute('type', 'file');
-    this.fileSelector.setAttribute('multiple', 'multiple');
-    this.fileSelector.setAttribute('accept', 'image/png, image/jpeg'); 
-    this.fileSelector.onchange = this.onFileChange;
-    this.fileSelector.value = this.state.inputValue;
-  }
-
-  componentDidMount() {
-    this.props.service.images().once("value", data => {
+  useEffect(() => {
+    props.service.images().once("value", data => {
       const images = snapshotToArray(data);
-      this.setState({ images: images });
+      setImages(images);
     });
-  }
+  }, [])
 
-  findParent = t => {
+
+  function findParent(t) {
     if (t.getAttribute("role") === "button") {
       return t;
     } else {
-      return this.findParent(t.parentElement);
+      return findParent(t.parentElement);
     }
   };
- 
-  onFileChange = e => {  
-    const newImages = [ ...this.state.images ];  
-    Array.from(this.fileSelector.files).forEach(file => {
-      this.props.service.storage.ref(file.name).put(file);
-      const uid = this.props.service.images().push().key;
-      this.props.service.image(uid).set({
+
+  function onFileChange(e) {
+    const newImages = [...images];
+    Array.from(fileSelector.files).forEach(file => {
+      props.service.storage.ref(file.name).put(file);
+      const uid = props.service.images().push().key;
+      props.service.image(uid).set({
         name: file.name,
         date: file.lastModified
-      });   
-      newImages.push({ key:uid, name:file.name, date:file.lastModified})
+      });
+      newImages.push({ key: uid, name: file.name, date: file.lastModified })
       console.log(newImages)
     });
-
-    this.setState({ images: newImages });
+    setImages(newImages);
   };
 
-  onAddClick = e => {
-    this.fileSelector.click();
+  function onAddClick(e) {
+    fileSelector.click();
   };
 
-  onClick = e => {
-    const parent = this.findParent(e.target);
+  function onClick(e) {
+    const parent = findParent(e.target);
     const name = parent.getAttribute("value");
     const uid = parent.getAttribute("data-uid");
     if (name && uid) {
-      this.props.history.push({
+      props.history.push({
         pathname: ROUTES.ADD,
-        state: { name: name, imageID: uid}
+        state: { name: name, imageID: uid }
       });
     }
   };
 
-  render() {
-    const { classes } = this.props;
-    const { images } = this.state;
-
-    return (
-      <div>
-        <List className={classes.root}>
-          {images &&
-            images.map((item, index) => (
-              <ListItem key={index} button onClick={this.onClick} value={item.name} data-uid={item.key}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <ImageIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={item.name} secondary={new Date(item.date).toLocaleString()} />
-              </ListItem>
-            ))}
-        </List>
-        <Fab
-              color="primary"
-              aria-label="Add"
-              className={classes.fab}
-              onClick={this.onAddClick}
-            >
-              <AddIcon />
-            </Fab>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <List className={classes.root}>
+        {images &&
+          images.map((item, index) => (
+            <ListItem key={index} button onClick={onClick} value={item.name} data-uid={item.key}>
+              <ListItemAvatar>
+                <Avatar>
+                  <ImageIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={item.name} secondary={new Date(item.date).toLocaleString()} />
+            </ListItem>
+          ))}
+      </List>
+      <Fab
+        color="primary"
+        aria-label="Add"
+        className={classes.fab}
+        onClick={onAddClick}
+      >
+        <AddIcon />
+      </Fab>
+    </div>
+  );
 }
 
 const Photo = compose(
