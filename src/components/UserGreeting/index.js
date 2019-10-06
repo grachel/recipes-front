@@ -1,44 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { compose } from 'recompose';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 import { withAuthorization } from '../Session';
 import { withService } from '../Service';
+import { styles } from './styles';
 
-const styles = theme => ({
-  right: {
-    right: 0
-  },
-});
+function UserGreetingBase(props) {
+  const [username, setUsername] = useState(null);
+  const { service, authUser, classes } = props;
 
-class UserGreetingBase extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { username: null };
-  }
-
-  componentDidMount() {
-    const { service, authUser } = this.props;
-
+  useEffect(() => {
     service.user(authUser.uid).once("value", data => {
-      this.setState({username: data.val().username})
-    }); 
-  }
+      setUsername(data.val().username);
+    });
+  }, [])
 
-  render() {
-    const { username } = this.state;
-    const { classes } = this.props;
-
-    return (
-      <Typography variant="subtitle1" color="inherit" className={classes.right}>
-        Cześć, {username}
-      </Typography>
-    )
-  }
+  return (
+    <Typography variant="subtitle1" color="inherit" className={classes.right}>
+      Cześć, {username}
+    </Typography>
+  )
 }
-
 
 const condition = authUser => !!authUser;
 
