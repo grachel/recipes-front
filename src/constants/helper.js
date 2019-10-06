@@ -38,6 +38,8 @@ export function errorMessage(errorCode) {
       return "Użytkownik nieaktywny"  
     case 'auth/wrong-password':
       return "Nie prawidłowe hasło"
+    case 'auth/email-already-in-use':
+      return "Użytkownik o podanym adresie już istnieje"  
     default:
       return errorCode
   }

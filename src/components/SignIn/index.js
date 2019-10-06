@@ -11,7 +11,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import ErrorIcon from '@material-ui/icons/Error';
 
-import { SignUpLink } from '../SignUp';
 import { withService } from '../Service';
 import * as ROUTES from '../../constants/routes';
 import { styles } from './styles';
@@ -83,7 +82,9 @@ function SignInFormBase(props) {
           <Typography variant="body1" gutterBottom>
             <Link to={ROUTES.PASSWORD_FORGET}>Nie pamiętam hasła</Link>
           </Typography>
-          <SignUpLink />
+          <Typography variant="body1" gutterBottom>
+            Nie posiadasz konta? <Link to={ROUTES.SIGN_UP}>Zarejestruj się</Link>
+          </Typography>
         </form>
       </Paper>
     </div>

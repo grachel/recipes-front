@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from "@material-ui/core/styles";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -12,75 +11,23 @@ import ErrorIcon from '@material-ui/icons/Error';
 
 import { withService } from '../Service';
 import * as ROUTES from '../../constants/routes';
+import { styles } from './styles';
+import { errorMessage } from '../../constants/helper';
 
-const INITIAL_STATE = {
-  username: '',
-  email: '',
-  passwordOne: '',
-  passwordTwo: '',
-  error: null,
-};
-
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
-    padding: theme.spacing.unit * 2,
-    ali: 'center',
-  },
-  button: {
-    margin: theme.spacing.unit,
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-  },
-  input: {
-    display: 'none',
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    width: '30%',
-    display: 'block',
-    margin: 'auto',
-    marginTop: '5%'
-  },
-  chip: {
-    margin: theme.spacing.unit,
-  },
-});
-
-function errorMessage(errorCode) {
-  switch (errorCode) {
-    case 'auth/email-already-in-use':
-      return "Użytkownik o podanym adresie już istnieje"
-    case 'auth/invalid-email':
-      return "Adres e-mail jest nieprawidłowy"
-    case 'auth/weak-password':
-      return "Podane hasło jest zbyt słabe"
-    default:
-      return errorCode
-  }
-}
-
-class SignUpFormBase extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { ...INITIAL_STATE };
-  }
-
-  onSubmit = event => {
-    const { username, email, passwordOne } = this.state;
-
-    this.props.service
-      .doCreateUserWithEmailAndPassword(email, passwordOne)
+function SignUpFormBase(props) {
+  const[ username, setUsername ] = useState('');
+  const[ email, setEmail ] = useState('');
+  const[ password, setPassword] = useState('');
+  const[ confirmPassword, setConfirmPassword] = useState('');
+  const[  error, setError ] = useState(null);
+  const isInvalid = password !== confirmPassword || password === '' || email === '' || username === '';
+  const { classes } = props;
+  
+  function onSubmit(event) {
+    props.service
+      .doCreateUserWithEmailAndPassword(email, password)
       .then(authUser => {
-        return this.props.service
+        return props.service
           .user(authUser.user.uid)
           .set({
             username,
@@ -88,111 +35,86 @@ class SignUpFormBase extends Component {
           });
       })
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setError(null);
+        props.history.push(ROUTES.HOME);
       })
       .catch(error => {
-        this.setState({ error });
+        setError(error);
       });
-
     event.preventDefault();
   }
 
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  render() {
-    const {
-      username,
-      email,
-      passwordOne,
-      passwordTwo,
-      error,
-    } = this.state;
-
-    const isInvalid =
-      passwordOne !== passwordTwo ||
-      passwordOne === '' ||
-      email === '' ||
-      username === '';
-
-    const { classes } = this.props;
-
-    return (
-      <div className={classes.root}>
-        <Paper className={classes.paper}>
-          <form onSubmit={this.onSubmit}>
-            <h1>Rejestracja</h1><br />
-            <TextField
-              id="standard-name"
-              label="Nazwa użytkownika"
-              className={classes.textField}
-              value={username}
-              name="username"
-              onChange={this.onChange}
-              margin="normal"
-            /> <br />
-            <TextField
-              id="standard-name"
-              label="E-Mail"
-              className={classes.textField}
-              value={email}
-              name="email"
-              onChange={this.onChange}
-              margin="normal"
-            /> <br />
-            <TextField
-              id="standard-password-input"
-              label="Hasło"
-              name="passwordOne"
-              className={classes.textField}
-              type="password"
-              autoComplete="current-password"
-              onChange={this.onChange}
-              margin="normal"
-              value={passwordOne}
-            /><br />
-            <TextField
-              id="standard-password-input"
-              label="Powtórz hasło"
-              name="passwordTwo"
-              className={classes.textField}
-              type="password"
-              autoComplete="current-password"
-              onChange={this.onChange}
-              margin="normal"
-              value={passwordTwo}
-            /><br />
-            <Button type="submit" disabled={isInvalid} variant="contained" color="primary" className={classes.button}>
-              Zarejestruj się
-            </Button><br />
-            {
-              error &&
-              <Chip
-                avatar={
-                  <Avatar>
-                    <ErrorIcon />
-                  </Avatar>
-                }
-                label={errorMessage(error.code)}
-                onDelete={() => this.setState({ error: false })}
-                className={classes.chip}
-                color="secondary"
-              />
-            }
-          </form>
-        </Paper>
-      </div>
-    );
-  }
+  return (
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <form onSubmit={onSubmit}>
+          <h1>Rejestracja</h1><br />
+          <TextField
+            id="standard-name"
+            label="Nazwa użytkownika"
+            className={classes.textField}
+            value={username}
+            name="username"
+            onChange={ev => setUsername(ev.target.value)}
+            margin="normal"
+          /> <br />
+          <TextField
+            id="standard-name"
+            label="E-Mail"
+            className={classes.textField}
+            value={email}
+            name="email"
+            onChange={ev => setEmail(ev.target.value)}
+            margin="normal"
+          /> <br />
+          <TextField
+            id="standard-password-input"
+            label="Hasło"
+            name="passwordOne"
+            className={classes.textField}
+            type="password"
+            autoComplete="current-password"
+            onChange={ev => setPassword(ev.target.value)}
+            margin="normal"
+            value={password}
+          /><br />
+          <TextField
+            id="standard-password-input"
+            label="Powtórz hasło"
+            name="passwordTwo"
+            className={classes.textField}
+            type="password"
+            autoComplete="current-password"
+            onChange={ev => setConfirmPassword(ev.target.value)}
+            margin="normal"
+            value={confirmPassword}
+          /><br />
+          <Button type="submit" disabled={isInvalid} variant="contained" color="primary" className={classes.button}>
+            Zarejestruj się
+          </Button><br />
+          {
+            error &&
+            <Chip
+              avatar={
+                <Avatar>
+                  <ErrorIcon />
+                </Avatar>
+              }
+              label={errorMessage(error.code)}
+              onDelete={() => setError(null)}
+              className={classes.chip}
+              color="secondary"
+            />
+          }
+        </form>
+      </Paper>
+    </div>
+  );
 }
-
-const SignUpLink = () => (
-  <Typography variant="body1" gutterBottom>
-    Nie posiadasz konta? <Link to={ROUTES.SIGN_UP}>Zarejestruj się</Link>
-  </Typography>
-);
 
 const SignUpPage = compose(
   withRouter,
@@ -202,4 +124,4 @@ const SignUpPage = compose(
 
 export default SignUpPage;
 
-export { SignUpLink };
+export { SignUpPage };
