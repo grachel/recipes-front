@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
 
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
@@ -20,168 +19,129 @@ import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
 import SignOutButton from "../SignOut";
 import UserGreeting from "../UserGreeting";
+import { styles } from './styles';
 
-const styles = theme => ({
-  root: {
-    width: "100%"
-  },
-  grow: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20
-  },
-  title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block"
-    }
-  },
-  sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "flex"
-    }
-  }
-});
+export function NavigationBase(props){
+  const [anchor, setAnchor] = useState(null);
+  const { classes } = props;
+  const open = Boolean(anchor);
 
-function HomeIcon(props) {
+  function handleMenu(event) {
+    setAnchor(event.currentTarget);
+  };
+
+  function handleClose() {
+    setAnchor(null);
+  };
+
+  function onHomeClick(){
+    props.history.push(ROUTES.HOME);
+  };
+
+  function onAddClick(){
+    props.history.push(ROUTES.ADD);
+  };
+
+  function onPhotoClick(){
+    props.history.push(ROUTES.PHOTO);
+  };
+
+  function onPwChangeClick(){
+    handleClose();
+    props.history.push(ROUTES.PASSWORD_CHANGE);
+  };
+
+  function onLoginClick(){
+    props.history.push(ROUTES.SIGN_IN);
+  };
+
   return (
-    <SvgIcon {...props}>
-      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-    </SvgIcon>
+    <AuthUserContext.Consumer>
+      {authUser => (
+        <div className={classes.root}>
+          <AppBar position="static">
+            <Toolbar>
+              <IconButton
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="Menu"
+                onClick={onHomeClick}
+              >
+                {/* Home Icon */}
+                <SvgIcon className={classes.icon}>
+                  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                </SvgIcon>
+              </IconButton>
+              <IconButton
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="Dodaj"
+                onClick={onAddClick}
+              >
+                <AddIcon className={classes.icon} />
+              </IconButton>
+              <IconButton
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="Zapisane"
+                onClick={onPhotoClick}
+              >
+                <PhotoIcon className={classes.icon} />
+              </IconButton>
+              <Typography
+                variant="h6"
+                color="inherit"
+                className={classes.grow}
+              >
+                Przepisy
+              </Typography>
+              {authUser && <UserGreeting />}
+              <div className={classes.sectionDesktop}>
+                {authUser ? (
+                  <div>
+                    <IconButton
+                      aria-owns={open ? "menu-appbar" : undefined}
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchor}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right"
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right"
+                      }}
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={onPwChangeClick}>
+                        Zmień hasło
+                      </MenuItem>
+                      <SignOutButton event={handleClose}>
+                        Wyloguj
+                      </SignOutButton>
+                    </Menu>
+                  </div>
+                ) : (
+                    <Button color="inherit" onClick={onLoginClick}>
+                      Zaloguj się
+                  </Button>
+                  )}
+              </div>
+            </Toolbar>
+          </AppBar>
+        </div>
+      )}
+    </AuthUserContext.Consumer>
   );
 }
-
-class NavigationBase extends React.Component {
-  state = {
-    anchorEl: null
-  };
-
-  handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
-  onHomeClick = () => {
-    this.props.history.push(ROUTES.HOME);
-  };
-
-  onAddClick = () => {
-    this.props.history.push(ROUTES.ADD);
-  };
-
-  onPhotoClick = () => {
-    this.props.history.push(ROUTES.PHOTO);
-  };
-
-  onPwChangeClick = () => {
-    this.handleClose();
-    this.props.history.push(ROUTES.PASSWORD_CHANGE);
-  };
-
-  onLoginClick = () => {
-    this.props.history.push(ROUTES.SIGN_IN);
-  };
-
-  render() {
-    const { classes } = this.props;
-    const { anchorEl } = this.state;
-    const open = Boolean(anchorEl);
-
-    return (
-      <AuthUserContext.Consumer>
-        {authUser => (
-          <div className={classes.root}>
-            <AppBar position="static">
-              <Toolbar>
-                <IconButton
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="Menu"
-                  onClick={this.onHomeClick}
-                >
-                  <HomeIcon className={classes.icon} />
-                </IconButton>
-                <IconButton
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="Dodaj"
-                  onClick={this.onAddClick}
-                >
-                  <AddIcon className={classes.icon} />
-                </IconButton>
-                <IconButton
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="Zapisane"
-                  onClick={this.onPhotoClick}
-                >
-                  <PhotoIcon className={classes.icon} />
-                </IconButton>
-                <Typography
-                  variant="h6"
-                  color="inherit"
-                  className={classes.grow}
-                >
-                  Przepisy
-                </Typography>
-                {authUser && <UserGreeting />}
-                <div className={classes.sectionDesktop}>
-                  {authUser ? (
-                    <div>
-                      <IconButton
-                        aria-owns={open ? "menu-appbar" : undefined}
-                        aria-haspopup="true"
-                        onClick={this.handleMenu}
-                        color="inherit"
-                      >
-                        <AccountCircle />
-                      </IconButton>
-                      <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: "top",
-                          horizontal: "right"
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "right"
-                        }}
-                        open={open}
-                        onClose={this.handleClose}
-                      >
-                        <MenuItem onClick={this.onPwChangeClick}>
-                          Zmień hasło
-                        </MenuItem>
-                        <SignOutButton event={this.handleClose}>
-                          Wyloguj
-                        </SignOutButton>
-                      </Menu>
-                    </div>
-                  ) : (
-                    <Button color="inherit" onClick={this.onLoginClick}>
-                      Zaloguj się
-                    </Button>
-                  )}
-                </div>
-              </Toolbar>
-            </AppBar>
-          </div>
-        )}
-      </AuthUserContext.Consumer>
-    );
-  }
-}
-
-NavigationBase.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 const Navigation = compose(
   withRouter,
