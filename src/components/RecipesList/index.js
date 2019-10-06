@@ -7,66 +7,47 @@ import Paper from "@material-ui/core/Paper";
 import Truncate from "react-truncate";
 
 import * as ROUTES from "../../constants/routes";
+import { styles } from "./styles";
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1
-  },
-  paper: {
-    margin: "1%",
-    height: 250,
-    width: 250,
-    padding: 10,
-    overflow: "hidden",
-    cursor: "pointer"
-  },
-  title: {
-    display: "block",
-    fontWeight: "bold"
-  },
-});
+function RecipesListBase(props) {
+  const { classes } = props;
 
-export class RecipesListBase extends React.Component {
-  findPaper = t => {
+  function findPaper(t) {
     if (t.tagName === "DIV") {
       return t;
     } else {
-      return this.findPaper(t.parentElement);
+      return findPaper(t.parentElement);
     }
   };
 
-  onClick = e => {
-    const paper = this.findPaper(e.target);
+  function onClick(e) {
+    const paper = findPaper(e.target);
     if (paper) {
-      this.props.history.push(ROUTES.RECIPE + "/" + paper.id);
+      props.history.push(ROUTES.RECIPE + "/" + paper.id);
     }
   };
 
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <div>        
-        <Grid container justify="center" className={classes.root} spacing={8}>
-          {this.props.recipes &&
-            this.props.recipes.map((item, index) => (
-              <Paper
-                id={item.key}
-                key={index}
-                className={classes.paper}
-                onClick={this.onClick}
-              >
-                <span className={classes.title}>{item.title}</span>
-                <br />
-                <Truncate lines={7} ellipsis={<span>...</span>}>
-                  {item.desc}
-                </Truncate>
-              </Paper>              
-            ))}
-        </Grid>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Grid container justify="center" className={classes.root} spacing={8}>
+        {props.recipes &&
+          props.recipes.map((item, index) => (
+            <Paper
+              id={item.key}
+              key={index}
+              className={classes.paper}
+              onClick={onClick}
+            >
+              <span className={classes.title}>{item.title}</span>
+              <br />
+              <Truncate lines={7} ellipsis={<span>...</span>}>
+                {item.desc}
+              </Truncate>
+            </Paper>
+          ))}
+      </Grid>
+    </div>
+  );
 }
 
 const RecipesList = compose(
