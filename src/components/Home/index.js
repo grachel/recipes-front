@@ -11,7 +11,7 @@ import { withService } from "../Service";
 import { snapshotToArray, anyIncludes } from "../../constants/helper.js";
 import { styles } from './styles';
 
-export function Home(props) {
+function Home(props) {
   const [recipes, setRecipes] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const { classes } = props;

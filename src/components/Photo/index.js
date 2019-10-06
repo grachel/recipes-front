@@ -16,7 +16,7 @@ import { withService } from "../Service";
 import { snapshotToArray } from "../../constants/helper.js";
 import { styles } from "./styles";
 
-export function PhotoBase(props) {
+function PhotoBase(props) {
   const [images, setImages] = useState([]);
   const { classes } = props;
 

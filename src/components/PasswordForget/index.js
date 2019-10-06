@@ -12,7 +12,7 @@ import { withService } from '../Service';
 import { styles } from './styles';
 import { errorMessage } from '../../constants/helper';
 
-export function PasswordForgetFormBase(props) {
+function PasswordForgetFormBase(props) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState(null);
   const { classes } = props;

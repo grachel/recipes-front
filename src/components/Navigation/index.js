@@ -21,7 +21,7 @@ import SignOutButton from "../SignOut";
 import UserGreeting from "../UserGreeting";
 import { styles } from './styles';
 
-export function NavigationBase(props){
+function NavigationBase(props){
   const [anchor, setAnchor] = useState(null);
   const { classes } = props;
   const open = Boolean(anchor);

@@ -13,7 +13,7 @@ import { withAuthorization } from "../Session";
 import { withService } from "../Service";
 import { styles } from "./styles";
 
-export function Add(props) {
+function Add(props) {
   const [image, setImage] = useState('');
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');

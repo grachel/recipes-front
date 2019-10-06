@@ -12,7 +12,7 @@ import { withService } from '../Service';
 import { styles } from './styles';
 import { errorMessage } from "../../constants/helper.js";
 
-export function PasswordChangeForm(props) {
+function PasswordChangeForm(props) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
