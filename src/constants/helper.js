@@ -1,7 +1,7 @@
 export function snapshotToArray(snapshot) {
   var returnArr = [];
 
-  snapshot.forEach(function(childSnapshot) {
+  snapshot.forEach(function (childSnapshot) {
     var item = childSnapshot.val();
     item.key = childSnapshot.key;
 
@@ -11,12 +11,12 @@ export function snapshotToArray(snapshot) {
   return returnArr;
 }
 
-export function anyIncludes(source, searchArray) {  
+export function anyIncludes(source, searchArray) {
   let ret = false;
   const txt = source.toLowerCase().replace("\n", " ");
-  searchArray.forEach(function(search) {
+  searchArray.forEach(function (search) {
     const srch = search.trim();
-    if(srch.length > 0 && txt.includes(srch)){
+    if (srch.length > 0 && txt.includes(srch)) {
       ret = true;
     }
   });
@@ -27,9 +27,13 @@ export function anyIncludes(source, searchArray) {
 export function errorMessage(errorCode) {
   switch (errorCode) {
     case 'auth/requires-recent-login':
-      return "Sesja wygasła. Zaloguj się ponownie."  
+      return "Sesja wygasła. Zaloguj się ponownie."
     case 'auth/weak-password':
       return "Podane hasło jest zbyt słabe"
+    case 'auth/user-not-found':
+      return "Użytkownik o podanym adresie nie istnieje"
+    case 'auth/invalid-email':
+      return "Adres e-mail jest nieprawidłowy"
     default:
       return errorCode
   }

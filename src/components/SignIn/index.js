@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from "prop-types";
+import { Link } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 import { withStyles } from "@material-ui/core/styles";
 import { compose } from 'recompose';
 import Button from '@material-ui/core/Button';
@@ -11,7 +13,6 @@ import Chip from '@material-ui/core/Chip';
 import ErrorIcon from '@material-ui/icons/Error';
 
 import { SignUpLink } from '../SignUp';
-import { PasswordForgetLink } from '../PasswordForget';
 import { withService } from '../Service';
 import * as ROUTES from '../../constants/routes';
 
@@ -143,7 +144,9 @@ class SignInFormBase extends Component {
                 color="secondary"
               />
             }
-            <PasswordForgetLink />
+            <Typography variant="body1" gutterBottom>
+              <Link to={ROUTES.PASSWORD_FORGET}>Nie pamiętam hasła</Link>
+            </Typography>
             <SignUpLink />
           </form>
         </Paper>
