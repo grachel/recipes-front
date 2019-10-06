@@ -34,6 +34,10 @@ export function errorMessage(errorCode) {
       return "Użytkownik o podanym adresie nie istnieje"
     case 'auth/invalid-email':
       return "Adres e-mail jest nieprawidłowy"
+    case 'auth/user-disabled':
+      return "Użytkownik nieaktywny"  
+    case 'auth/wrong-password':
+      return "Nie prawidłowe hasło"
     default:
       return errorCode
   }

@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from "@material-ui/core/styles";
@@ -15,149 +14,81 @@ import ErrorIcon from '@material-ui/icons/Error';
 import { SignUpLink } from '../SignUp';
 import { withService } from '../Service';
 import * as ROUTES from '../../constants/routes';
+import { styles } from './styles';
+import { errorMessage } from '../../constants/helper';
 
+function SignInFormBase(props) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const { classes } = props;
+  const isInvalid = password === '' || email === '';
 
-const INITIAL_STATE = {
-  email: '',
-  password: '',
-  error: null,
-};
-
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
-    padding: theme.spacing.unit * 2,
-    ali: 'center',
-  },
-  button: {
-    margin: theme.spacing.unit,
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-  },
-  input: {
-    display: 'none',
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    width: '30%',
-    display: 'block',
-    margin: 'auto',
-    marginTop: '5%'
-  },
-  chip: {
-    margin: theme.spacing.unit,
-  },
-});
-
-function errorMessage(errorCode) {
-  switch (errorCode) {
-    case 'auth/invalid-email':
-      return "Nie prawidłowy adres e-mail"
-    case 'auth/user-disabled':
-      return "Użytkownik nieaktywny"
-    case 'auth/user-not-found':
-      return "Nie znaleziono użytkownika"
-    case 'auth/wrong-password':
-      return "Nie prawidłowe hasło"
-    default:
-      return errorCode
-  }
-}
-
-class SignInFormBase extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { ...INITIAL_STATE };
-  }
-
-  onSubmit = event => {
-    const { email, password } = this.state;
-
-    this.props.service
+  function onSubmit(event) {
+    props.service
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+        setEmail('');
+        setPassword('');
+        setError(null);
+        props.history.push(ROUTES.HOME);
       })
       .catch(error => {
-        this.setState({ error });
+        setError(error);
       });
-
     event.preventDefault();
   };
 
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  render() {
-    const { email, password, error } = this.state;
-    const { classes } = this.props;
-    const isInvalid = password === '' || email === '';
-
-    return (
-      <div className={classes.root}>
-        <Paper className={classes.paper}>
-          <form onSubmit={this.onSubmit}>
-            <h1>Logowanie</h1><br />
-            <TextField
-              id="standard-name"
-              label="E-Mail"
-              className={classes.textField}
-              value={email}
-              name="email"
-              onChange={this.onChange}
-              margin="normal"
-            /> <br />
-            <TextField
-              id="standard-password-input"
-              label="Hasło"
-              name="password"
-              className={classes.textField}
-              type="password"
-              autoComplete="current-password"
-              onChange={this.onChange}
-              margin="normal"
-            /><br />
-            <Button type="submit" disabled={isInvalid} variant="contained" color="primary" className={classes.button}>
-              Zaloguj się
-            </Button><br />
-            {
-              error &&
-              <Chip
-                avatar={
-                  <Avatar>
-                    <ErrorIcon />
-                  </Avatar>
-                }
-                label={errorMessage(error.code)}
-                onDelete={() => this.setState({ error: false })}
-                className={classes.chip}
-                color="secondary"
-              />
-            }
-            <Typography variant="body1" gutterBottom>
-              <Link to={ROUTES.PASSWORD_FORGET}>Nie pamiętam hasła</Link>
-            </Typography>
-            <SignUpLink />
-          </form>
-        </Paper>
-      </div>
-    );
-  }
+  return (
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <form onSubmit={onSubmit}>
+          <h1>Logowanie</h1><br />
+          <TextField
+            id="standard-name"
+            label="E-Mail"
+            className={classes.textField}
+            value={email}
+            name="email"
+            onChange={ev => setEmail(ev.target.value)}
+            margin="normal"
+          /> <br />
+          <TextField
+            id="standard-password-input"
+            label="Hasło"
+            name="password"
+            className={classes.textField}
+            type="password"
+            autoComplete="current-password"
+            onChange={ev => setPassword(ev.target.value)}
+            margin="normal"
+          /><br />
+          <Button type="submit" disabled={isInvalid} variant="contained" color="primary" className={classes.button}>
+            Zaloguj się
+          </Button><br />
+          {
+            error &&
+            <Chip
+              avatar={
+                <Avatar>
+                  <ErrorIcon />
+                </Avatar>
+              }
+              label={errorMessage(error.code)}
+              onDelete={() => setError(null)}
+              className={classes.chip}
+              color="secondary"
+            />
+          }
+          <Typography variant="body1" gutterBottom>
+            <Link to={ROUTES.PASSWORD_FORGET}>Nie pamiętam hasła</Link>
+          </Typography>
+          <SignUpLink />
+        </form>
+      </Paper>
+    </div>
+  );
 }
-
-SignInFormBase.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 const SignInPage = compose(
   withRouter,
