@@ -26,33 +26,13 @@ export function NavigationBase(props){
   const { classes } = props;
   const open = Boolean(anchor);
 
-  function handleMenu(event) {
-    setAnchor(event.currentTarget);
-  };
-
   function handleClose() {
     setAnchor(null);
   };
 
-  function onHomeClick(){
-    props.history.push(ROUTES.HOME);
-  };
-
-  function onAddClick(){
-    props.history.push(ROUTES.ADD);
-  };
-
-  function onPhotoClick(){
-    props.history.push(ROUTES.PHOTO);
-  };
-
-  function onPwChangeClick(){
+  function route(path){
     handleClose();
-    props.history.push(ROUTES.PASSWORD_CHANGE);
-  };
-
-  function onLoginClick(){
-    props.history.push(ROUTES.SIGN_IN);
+    props.history.push(path);
   };
 
   return (
@@ -65,7 +45,7 @@ export function NavigationBase(props){
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="Menu"
-                onClick={onHomeClick}
+                onClick={ () => route(ROUTES.HOME)}
               >
                 {/* Home Icon */}
                 <SvgIcon className={classes.icon}>
@@ -76,7 +56,7 @@ export function NavigationBase(props){
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="Dodaj"
-                onClick={onAddClick}
+                onClick={() => route(ROUTES.ADD)}
               >
                 <AddIcon className={classes.icon} />
               </IconButton>
@@ -84,7 +64,7 @@ export function NavigationBase(props){
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="Zapisane"
-                onClick={onPhotoClick}
+                onClick={() => route(ROUTES.PHOTO)}
               >
                 <PhotoIcon className={classes.icon} />
               </IconButton>
@@ -102,7 +82,7 @@ export function NavigationBase(props){
                     <IconButton
                       aria-owns={open ? "menu-appbar" : undefined}
                       aria-haspopup="true"
-                      onClick={handleMenu}
+                      onClick={event => setAnchor(event.currentTarget)}
                       color="inherit"
                     >
                       <AccountCircle />
@@ -121,7 +101,7 @@ export function NavigationBase(props){
                       open={open}
                       onClose={handleClose}
                     >
-                      <MenuItem onClick={onPwChangeClick}>
+                      <MenuItem onClick={() => route(ROUTES.PASSWORD_CHANGE)}>
                         Zmień hasło
                       </MenuItem>
                       <SignOutButton event={handleClose}>
@@ -130,7 +110,7 @@ export function NavigationBase(props){
                     </Menu>
                   </div>
                 ) : (
-                    <Button color="inherit" onClick={onLoginClick}>
+                    <Button color="inherit" onClick={() => route(ROUTES.SIGN_IN)}>
                       Zaloguj się
                   </Button>
                   )}
