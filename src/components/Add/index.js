@@ -17,7 +17,7 @@ function Add(props) {
   const [image, setImage] = useState('');
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
-  const service = useContext(ServiceContext.Consumer)
+  const service = useContext(ServiceContext)
   const { classes } = props;
 
   useEffect(() => {

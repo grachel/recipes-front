@@ -14,14 +14,20 @@ import { ServiceContext } from "../Service";
 function Recipe(props) {
   const printRef = useRef();
   const [recipe, setRecipe] = useState({});
-  const service = useContext(ServiceContext.Consumer)
+  const service = useContext(ServiceContext)
   const { classes } = props;
 
   useEffect(() => {
     const { id } = props.match.params;
-    service.recipe(id).once("value", data => {
-      setRecipe(data.val());
-    });
+
+    const rec = JSON.parse(sessionStorage.getItem("recipes")).find(o => { return o.key === id });
+    if(rec){
+      setRecipe(rec);
+    } else {
+      service.recipe(id).once("value", data => {
+        setRecipe(data.val());
+      });
+    }
   });
 
   return (

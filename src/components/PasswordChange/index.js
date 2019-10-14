@@ -16,7 +16,7 @@ function PasswordChangeForm(props) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
-  const service = useContext(ServiceContext.Consumer);
+  const service = useContext(ServiceContext);
   const { classes } = props;
   const isInvalid = password !== confirmPassword || password === '';
 

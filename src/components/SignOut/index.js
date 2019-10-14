@@ -4,7 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { ServiceContext } from '../Service';
 
 function SignOutButton(props) {
-  const service = useContext(ServiceContext.Consumer);
+  const service = useContext(ServiceContext);
   const { event } = props;
   return (
     <MenuItem onClick={() => {

@@ -6,7 +6,7 @@ import { ServiceContext } from '../Service';
 const withAuthentication = Component => {
   function WithAuthentication(props) {
     const [authUser, setAuthUser] = useState(null);
-    const service = useContext(ServiceContext.Consumer);
+    const service = useContext(ServiceContext);
 
     useEffect(() => {
       const listener = service.auth.onAuthStateChanged(

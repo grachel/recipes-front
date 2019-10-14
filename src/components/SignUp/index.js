@@ -20,7 +20,7 @@ function SignUpFormBase(props) {
   const[ password, setPassword] = useState('');
   const[ confirmPassword, setConfirmPassword] = useState('');
   const[  error, setError ] = useState(null);
-  const service = useContext(ServiceContext.Consumer);
+  const service = useContext(ServiceContext);
   const isInvalid = password !== confirmPassword || password === '' || email === '' || username === '';
   const { classes } = props;
   

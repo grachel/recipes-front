@@ -20,7 +20,7 @@ function SignInFormBase(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const service = useContext(ServiceContext.Consumer);
+  const service = useContext(ServiceContext);
   const { classes } = props;
   const isInvalid = password === '' || email === '';
 

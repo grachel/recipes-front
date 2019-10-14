@@ -9,7 +9,7 @@ import { styles } from './styles';
 
 function UserGreetingBase(props) {
   const [username, setUsername] = useState(null);
-  const service = useContext(ServiceContext.Consumer);
+  const service = useContext(ServiceContext);
   const { authUser, classes } = props;
 
   useEffect(() => {

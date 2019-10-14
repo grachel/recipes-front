@@ -18,7 +18,7 @@ import { styles } from "./styles";
 
 function PhotoBase(props) {
   const [images, setImages] = useState([]);
-  const service = useContext(ServiceContext.Consumer)
+  const service = useContext(ServiceContext)
   const { classes } = props;
 
   const fileSelector = document.createElement('input');

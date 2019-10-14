@@ -14,14 +14,17 @@ import { styles } from './styles';
 function Home(props) {
   const [recipes, setRecipes] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
-  const service = useContext(ServiceContext.Consumer);
+  const service = useContext(ServiceContext);
   const { classes } = props;
   
   useEffect(() => {
-    service.recipes().once("value", data => {
+    setRecipes(JSON.parse(sessionStorage.getItem("recipes")));
+
+    recipes.length === 0 && service.recipes().once("value", data => {
       const recipes = snapshotToArray(data);
       setRecipes(recipes);
       setFilteredRecipes(recipes);
+      sessionStorage.setItem("recipes", JSON.stringify(recipes))
     });
   }, []);
 

@@ -15,7 +15,7 @@ import { errorMessage } from '../../constants/helper';
 function PasswordForgetFormBase(props) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState(null);
-  const service = useContext(ServiceContext.Consumer);
+  const service = useContext(ServiceContext);
   const { classes } = props;
   const isInvalid = email === '';
 

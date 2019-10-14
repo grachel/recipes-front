@@ -8,8 +8,8 @@ import * as ROUTES from '../../constants/routes';
 
 const withAuthorization = condition => Component => {
   function WithAuthorization(props) {
-    const authUser = useContext(AuthUserContext.Consumer)
-    const service = useContext(ServiceContext.Consumer)
+    const authUser = useContext(AuthUserContext)
+    const service = useContext(ServiceContext)
 
     useEffect(() => {
       const listener = service.auth.onAuthStateChanged(
