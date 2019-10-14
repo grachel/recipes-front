@@ -32,7 +32,7 @@ function Add(props) {
           });
       }
     }
-  });
+  }, []);
 
   function onAddClick() {
     if (title && desc) {

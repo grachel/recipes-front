@@ -23,7 +23,7 @@ const withAuthorization = condition => Component => {
       return function cleanup() {
         listener();
       };
-    });
+    },[]);
 
     return (
         <div>{
