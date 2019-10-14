@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 
@@ -8,6 +8,7 @@ import * as ROUTES from '../../constants/routes';
 
 const withAuthorization = condition => Component => {
   function WithAuthorization(props) {
+    const authUser = useContext(AuthUserContext.Consumer)
 
     useEffect(() => {
       const listener = props.service.auth.onAuthStateChanged(
@@ -24,11 +25,9 @@ const withAuthorization = condition => Component => {
     });
 
     return (
-      <AuthUserContext.Consumer>
-        {authUser =>
+        <div>{
           condition(authUser) ? <Component {...props} authUser={authUser} /> : null
-        }
-      </AuthUserContext.Consumer>
+        }</div>
     );
   }
 
