@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { compose } from 'recompose';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 import { withAuthorization } from '../Session';
-import { withService } from '../Service';
+import { ServiceContext } from '../Service';
 import { styles } from './styles';
 
 function UserGreetingBase(props) {
   const [username, setUsername] = useState(null);
-  const { service, authUser, classes } = props;
+  const service = useContext(ServiceContext.Consumer);
+  const { authUser, classes } = props;
 
   useEffect(() => {
     service.user(authUser.uid).once("value", data => {
@@ -27,7 +28,6 @@ function UserGreetingBase(props) {
 const condition = authUser => !!authUser;
 
 const UserGreeting = compose(
-  withService,
   withAuthorization(condition),
   withStyles(styles),
 )(UserGreetingBase);

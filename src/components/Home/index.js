@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { compose } from "recompose";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -7,17 +7,18 @@ import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
 import { withAuthorization } from "../Session";
 import RecipesList from "../RecipesList";
-import { withService } from "../Service";
+import { ServiceContext } from "../Service";
 import { snapshotToArray, anyIncludes } from "../../constants/helper.js";
 import { styles } from './styles';
 
 function Home(props) {
   const [recipes, setRecipes] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
+  const service = useContext(ServiceContext.Consumer);
   const { classes } = props;
   
   useEffect(() => {
-    props.service.recipes().once("value", data => {
+    service.recipes().once("value", data => {
       const recipes = snapshotToArray(data);
       setRecipes(recipes);
       setFilteredRecipes(recipes);
@@ -69,7 +70,6 @@ const condition = authUser => !!authUser;
 
 const HomePage = compose(
   withStyles(styles),
-  withService,
   withAuthorization(condition)
 )(Home);
 

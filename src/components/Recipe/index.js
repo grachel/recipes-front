@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { compose } from "recompose";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -8,17 +8,18 @@ import PrintIcon from "@material-ui/icons/Print";
 import ReactToPrint from "react-to-print";
 
 import { withAuthorization } from "../Session";
-import { withService } from "../Service";
 import { styles } from "./styles";
+import { ServiceContext } from "../Service";
 
 function Recipe(props) {
   const printRef = useRef();
   const [recipe, setRecipe] = useState({});
+  const service = useContext(ServiceContext.Consumer)
   const { classes } = props;
 
   useEffect(() => {
     const { id } = props.match.params;
-    props.service.recipe(id).once("value", data => {
+    service.recipe(id).once("value", data => {
       setRecipe(data.val());
     });
   });
@@ -54,7 +55,6 @@ const condition = authUser => !!authUser;
 
 const RecipePage = compose(
   withStyles(styles),
-  withService,
   withAuthorization(condition)
 )(Recipe);
 

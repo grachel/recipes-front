@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { AuthUserContext } from './index';
-import { withService } from '../Service';
+import { ServiceContext } from '../Service';
 
 const withAuthentication = Component => {
   function WithAuthentication(props) {
     const [authUser, setAuthUser] = useState(null);
+    const service = useContext(ServiceContext.Consumer);
 
     useEffect(() => {
-      const listener = props.service.auth.onAuthStateChanged(
+      const listener = service.auth.onAuthStateChanged(
         authUser => {
           setAuthUser(authUser);
         },
@@ -27,7 +28,7 @@ const withAuthentication = Component => {
 
   }
 
-  return withService(WithAuthentication);
+  return WithAuthentication;
 };
 
 export default withAuthentication;

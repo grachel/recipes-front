@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
@@ -11,7 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import ErrorIcon from '@material-ui/icons/Error';
 
-import { withService } from '../Service';
+import { ServiceContext } from '../Service';
 import * as ROUTES from '../../constants/routes';
 import { styles } from './styles';
 import { errorMessage } from '../../constants/helper';
@@ -20,11 +20,12 @@ function SignInFormBase(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const service = useContext(ServiceContext.Consumer);
   const { classes } = props;
   const isInvalid = password === '' || email === '';
 
   function onSubmit(event) {
-    props.service
+    service
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
         setEmail('');
@@ -93,7 +94,6 @@ function SignInFormBase(props) {
 
 const SignInPage = compose(
   withRouter,
-  withService,
   withStyles(styles),
 )(SignInFormBase);
 

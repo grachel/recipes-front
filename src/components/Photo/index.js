@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { compose } from "recompose";
 import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from "react-router-dom";
@@ -12,12 +12,13 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
 import * as ROUTES from "../../constants/routes";
-import { withService } from "../Service";
+import { ServiceContext } from "../Service";
 import { snapshotToArray } from "../../constants/helper.js";
 import { styles } from "./styles";
 
 function PhotoBase(props) {
   const [images, setImages] = useState([]);
+  const service = useContext(ServiceContext.Consumer)
   const { classes } = props;
 
   const fileSelector = document.createElement('input');
@@ -27,7 +28,7 @@ function PhotoBase(props) {
   fileSelector.onchange = onFileChange;
 
   useEffect(() => {
-    props.service.images().once("value", data => {
+    service.images().once("value", data => {
       const images = snapshotToArray(data);
       setImages(images);
     });
@@ -45,9 +46,9 @@ function PhotoBase(props) {
   function onFileChange(e) {
     const newImages = [...images];
     Array.from(fileSelector.files).forEach(file => {
-      props.service.storage.ref(file.name).put(file);
-      const uid = props.service.images().push().key;
-      props.service.image(uid).set({
+      service.storage.ref(file.name).put(file);
+      const uid = service.images().push().key;
+      service.image(uid).set({
         name: file.name,
         date: file.lastModified
       });
@@ -102,7 +103,6 @@ function PhotoBase(props) {
 
 const Photo = compose(
   withStyles(styles),
-  withService,
   withRouter
 )(PhotoBase);
 

@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { withService } from '../Service';
+import { ServiceContext } from '../Service';
 
 function SignOutButton(props) {
+  const service = useContext(ServiceContext.Consumer);
   const { event } = props;
   return (
     <MenuItem onClick={() => {
       event();
-      props.service.doSignOut();
+      service.doSignOut();
     }
     }>Wyloguj</MenuItem>
   )
 }
 
-export default withService(SignOutButton);
+export default SignOutButton;

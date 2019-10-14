@@ -3,15 +3,16 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 
 import { AuthUserContext } from './index';
-import { withService} from '../Service';
+import { ServiceContext} from '../Service';
 import * as ROUTES from '../../constants/routes';
 
 const withAuthorization = condition => Component => {
   function WithAuthorization(props) {
     const authUser = useContext(AuthUserContext.Consumer)
+    const service = useContext(ServiceContext.Consumer)
 
     useEffect(() => {
-      const listener = props.service.auth.onAuthStateChanged(
+      const listener = service.auth.onAuthStateChanged(
         authUser => {
           if (!condition(authUser)) {
             props.history.push(ROUTES.SIGN_IN);
@@ -33,7 +34,6 @@ const withAuthorization = condition => Component => {
 
   return compose(
     withRouter,
-    withService,
   )(WithAuthorization);
 };
 

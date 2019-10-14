@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { withStyles } from "@material-ui/core/styles";
@@ -9,7 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import ErrorIcon from '@material-ui/icons/Error';
 
-import { withService } from '../Service';
+import { ServiceContext } from '../Service';
 import * as ROUTES from '../../constants/routes';
 import { styles } from './styles';
 import { errorMessage } from '../../constants/helper';
@@ -20,14 +20,15 @@ function SignUpFormBase(props) {
   const[ password, setPassword] = useState('');
   const[ confirmPassword, setConfirmPassword] = useState('');
   const[  error, setError ] = useState(null);
+  const service = useContext(ServiceContext.Consumer);
   const isInvalid = password !== confirmPassword || password === '' || email === '' || username === '';
   const { classes } = props;
   
   function onSubmit(event) {
-    props.service
+    service
       .doCreateUserWithEmailAndPassword(email, password)
       .then(authUser => {
-        return props.service
+        return service
           .user(authUser.user.uid)
           .set({
             username,
@@ -118,7 +119,6 @@ function SignUpFormBase(props) {
 
 const SignUpPage = compose(
   withRouter,
-  withService,
   withStyles(styles),
 )(SignUpFormBase);
 

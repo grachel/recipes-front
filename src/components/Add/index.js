@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { compose } from "recompose";
 import { withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
@@ -10,20 +10,21 @@ import TextField from "@material-ui/core/TextField";
 import * as ROUTES from "../../constants/routes";
 
 import { withAuthorization } from "../Session";
-import { withService } from "../Service";
 import { styles } from "./styles";
+import { ServiceContext } from "../Service";
 
 function Add(props) {
   const [image, setImage] = useState('');
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
+  const service = useContext(ServiceContext.Consumer)
   const { classes } = props;
 
   useEffect(() => {
     if (props.location && props.location.state) {
       const img = props.location.state.name;
       if (img) {
-        props.service.storage
+        service.storage
           .ref(img)
           .getDownloadURL()
           .then(url => {
@@ -35,9 +36,9 @@ function Add(props) {
 
   function onAddClick() {
     if (title && desc) {
-      const uid = props.service.recipes().push().key;
+      const uid = service.recipes().push().key;
 
-      props.service.recipe(uid).set({
+      service.recipe(uid).set({
         title,
         desc
       });
@@ -53,9 +54,9 @@ function Add(props) {
       const img = props.location.state.name;
       const id = props.location.state.imageID;
       if (img && id) {
-        props.service.image(id).remove();
+        service.image(id).remove();
 
-        props.service.storage
+        service.storage
           .ref(img)
           .delete();
       }
@@ -134,7 +135,6 @@ const condition = authUser => !!authUser;
 
 const AddPage = compose(
   withRouter,
-  withService,
   withStyles(styles),
   withAuthorization(condition)
 )(Add);
