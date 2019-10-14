@@ -53,7 +53,6 @@ function PhotoBase(props) {
         date: file.lastModified
       });
       newImages.push({ key: uid, name: file.name, date: file.lastModified })
-      console.log(newImages)
     });
     setImages(newImages);
   };

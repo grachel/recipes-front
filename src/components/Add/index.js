@@ -43,6 +43,11 @@ function Add(props) {
         desc
       });
 
+      const recs = JSON.parse(sessionStorage.getItem("recipes"));
+      if(recs){
+        recs.push({desc, title, 'key':uid});
+        sessionStorage.setItem("recipes", JSON.stringify(recs));
+      }
       removePhotoFromList();
 
       props.history.push(ROUTES.HOME);

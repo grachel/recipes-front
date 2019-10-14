@@ -18,14 +18,18 @@ function Home(props) {
   const { classes } = props;
   
   useEffect(() => {
-    setRecipes(JSON.parse(sessionStorage.getItem("recipes")));
-
-    recipes.length === 0 && service.recipes().once("value", data => {
-      const recipes = snapshotToArray(data);
-      setRecipes(recipes);
-      setFilteredRecipes(recipes);
-      sessionStorage.setItem("recipes", JSON.stringify(recipes))
-    });
+    const recs = JSON.parse(sessionStorage.getItem("recipes"));
+    if(recs){
+      setRecipes(recs);
+      setFilteredRecipes(recs);
+    } else {
+      service.recipes().once("value", data => {
+        const recipes = snapshotToArray(data);
+        setRecipes(recipes);
+        setFilteredRecipes(recipes);
+        sessionStorage.setItem("recipes", JSON.stringify(recipes))
+      });
+    }
   }, []);
 
   function onSearchChange(e){
