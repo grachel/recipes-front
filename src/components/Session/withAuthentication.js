@@ -1,39 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-import AuthUserContext from './context';
+import { AuthUserContext } from './index';
 import { withService } from '../Service';
 
 const withAuthentication = Component => {
-  class WithAuthentication extends React.Component {
-    constructor(props) {
-      super(props);
+  function WithAuthentication(props) {
+    const [authUser, setAuthUser] = useState(null);
 
-      this.state = {
-        authUser: null,
-      };
-    }
-
-    componentDidMount() {
-      this.listener = this.props.service.auth.onAuthStateChanged(
+    useEffect(() => {
+      const listener = props.service.auth.onAuthStateChanged(
         authUser => {
-          authUser
-            ? this.setState({ authUser })
-            : this.setState({ authUser: null });
+          setAuthUser(authUser);
         },
       );
-    }
 
-    componentWillUnmount() {
-      this.listener();
-    }
+      return function cleanup() {
+        listener();
+      };
+    });
 
-    render() {
-      return (
-        <AuthUserContext.Provider value={this.state.authUser}>
-          <Component {...this.props} />
-        </AuthUserContext.Provider>
-      );
-    }
+    return (
+      <AuthUserContext.Provider value={authUser}>
+        <Component {...props} />
+      </AuthUserContext.Provider>
+    );
+
   }
 
   return withService(WithAuthentication);
